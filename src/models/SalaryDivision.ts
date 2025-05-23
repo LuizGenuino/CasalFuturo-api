@@ -22,10 +22,10 @@ const SalaryDivision = sequelize.define<SalaryDivisionInstance>("SalaryDivision"
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-            model: "salary_categories",
+            model: "categories",
             key: "id",
         },
-        onDelete: "CASCADE",
+        onDelete: "SET NULL",
     },
     name: {
         type: DataTypes.STRING,
