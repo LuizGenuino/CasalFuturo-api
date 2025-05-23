@@ -22,7 +22,9 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.7",
     "sequelize-typescript": "^2.1.6",
-    "zod": "^3.25.20"
+    "winston": "^3.17.0",
+    "zod": "^3.25.26",
+    "zod-validation-error": "^3.4.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.2",
