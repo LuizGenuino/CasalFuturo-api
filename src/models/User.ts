@@ -61,6 +61,28 @@ const User = sequelize.define<UserInstance>("User", {
             isHex: true,
         },
     },
+    salary: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+        validate: {
+            isFloat: true,
+        },
+    },
+    planoId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+            model: "planos",
+            key: "id",
+        },
+    },
+    subscriptionExpiresAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        validate: {
+            isDate: true,
+        },
+    }
 }, {
     timestamps: true,
     tableName: "users",
@@ -68,23 +90,23 @@ const User = sequelize.define<UserInstance>("User", {
     hooks: {
         beforeCreate: async (user) => {
             const salt = await bcrypt.genSalt(Number(ENV.BCRYPT_SALT_ROUNDS) || 10);
-            user.password = await bcrypt.hash(user.dataValues.password, salt); 
+            user.password = await bcrypt.hash(user.dataValues.password, salt);
 
-             if(user.verificationCode &&  !user.verificationCodeExpiresAt){
+            if (user.verificationCode && !user.verificationCodeExpiresAt) {
                 user.verificationCodeExpiresAt = calculateTokenExpiry(1) // 1 hour
             }
         },
         beforeUpdate: async (user) => {
             if (user.changed("password")) {
                 const salt = await bcrypt.genSalt(Number(ENV.BCRYPT_SALT_ROUNDS) || 10);
-                user.password = await bcrypt.hash(user.dataValues.password, salt); 
+                user.password = await bcrypt.hash(user.dataValues.password, salt);
             }
 
-            if(user.changed("verificationCode") && user.verificationCode &&  !user.verificationCodeExpiresAt){
+            if (user.changed("verificationCode") && user.verificationCode && !user.verificationCodeExpiresAt) {
                 user.verificationCodeExpiresAt = calculateTokenExpiry(1) // 1 hour
             }
 
-            if(user.changed("resetPasswordToken") && user.resetPasswordToken &&  !user.resetPasswordExpiresAt){
+            if (user.changed("resetPasswordToken") && user.resetPasswordToken && !user.resetPasswordExpiresAt) {
                 user.resetPasswordExpiresAt = calculateTokenExpiry(1) // 1 hour
             }
         },
