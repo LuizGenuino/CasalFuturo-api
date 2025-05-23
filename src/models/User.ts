@@ -68,7 +68,7 @@ const User = sequelize.define<UserInstance>("User", {
             isFloat: true,
         },
     },
-    planoId: {
+    planId: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {

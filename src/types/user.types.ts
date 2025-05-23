@@ -13,7 +13,7 @@ export interface UserModel {
     verificationCodeExpiresAt?: Date;
     cor_hex: string;
     salary?: number; // salário do usuário
-    planoId?: string; // chave estrangeira para a tabela Planos
+    planId?: string; // chave estrangeira para a tabela Planos
     subscriptionExpiresAt?: Date; // data de validade da assinatura do usuário
     createdAt?: Date; // data de criação
     updatedAt?: Date; // data de atualização

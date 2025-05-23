@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/database";
 import { MarkedTableInstance } from "../types/markedTable.type";
 
-const MakerdTable = sequelize.define<MarkedTableInstance>("MarkedTable", {
+const MarkedTable = sequelize.define<MarkedTableInstance>("MarkedTable", {
     id: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -38,4 +38,4 @@ const MakerdTable = sequelize.define<MarkedTableInstance>("MarkedTable", {
     underscored: true,
 })
 
-export default MakerdTable;
+export default MarkedTable;

@@ -13,6 +13,7 @@ const InvestmentTable = sequelize.define<InvestmentTableInstance>("InvestmentTab
     creatorId: {
         type: DataTypes.UUID,
         allowNull: false,
+        unique: true,
         references: {
             model: "users",
             key: "id",
