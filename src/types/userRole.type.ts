@@ -1,10 +1,5 @@
 import { Model } from "sequelize";
+import { UserRoleModel } from "../interfaces/userRole.interface";
 
-export interface UserRoleModel {
-    id: string;
-    userId: string; // ID do usuário
-    roleId: string; // ID do papel
-    createdAt?: Date; // data de criação
-    updatedAt?: Date; // data de atualização
-}
+
 export interface UserRoleInstance extends Model<UserRoleModel>, UserRoleModel { }
