@@ -4,12 +4,10 @@ import { CategoryInstance } from "../types/category.type";
 
 
 const Category = sequelize.define<CategoryInstance>("Category", {
-    id: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        primaryKey: true,
-        defaultValue:
-            DataTypes.UUIDV4
+   id: { 
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
     name: {
         type: DataTypes.STRING,

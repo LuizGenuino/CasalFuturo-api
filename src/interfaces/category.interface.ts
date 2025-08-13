@@ -1,5 +1,5 @@
 export interface CategoryModel {
-    id: string;
+    id: number;
     name: string; // nome da categoria
     cor_hex: string;
     createdAt?: Date; // data de criação

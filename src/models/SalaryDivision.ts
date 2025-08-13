@@ -4,10 +4,9 @@ import { SalaryDivisionInstance } from "../types/salaryDivision.type";
 
 const SalaryDivision = sequelize.define<SalaryDivisionInstance>("SalaryDivision", {
     id: {
-        type: DataTypes.UUID,
-        allowNull: false,
+        type: DataTypes.INTEGER,
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4
+        autoIncrement: true,
     },
     userId: {
         type: DataTypes.UUID,
@@ -19,7 +18,7 @@ const SalaryDivision = sequelize.define<SalaryDivisionInstance>("SalaryDivision"
         onDelete: "CASCADE",
     },
     categoryId: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
             model: "categories",

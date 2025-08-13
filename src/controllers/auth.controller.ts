@@ -5,6 +5,7 @@ import { logger } from "../utils/logger";
 import { sendVerificationEmail } from "../providers/email/mailtrap.provider";
 import { UserDTO } from "../DTOs/user.dto";
 import { generateJWT, setTokenCookie } from "../utils/auth.utils";
+import { NotFoundError } from "../errors/notFound.error";
 
 
 export class AuthController {
@@ -27,4 +28,16 @@ export class AuthController {
             data: UserDTO.toJson(user),
         });
     });
+
+    static fetchCurrentUser = asyncHandler(async (req: Request, res: Response) => {
+        const user = await AuthService.getCurrentUser(req)
+
+        if (!user) {
+            logger.debug("User not found", { userId: req.userId })
+            throw new NotFoundError("User not found")
+        }
+
+        res.status(200).json({ success: true, message: "User fetched successfully", data: UserDTO.toJson(user) })
+    })
+
 }
