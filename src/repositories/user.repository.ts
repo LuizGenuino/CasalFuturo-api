@@ -1,5 +1,6 @@
 //userRepository.ts
 
+import { Op } from "sequelize";
 import { NotFoundError } from "../errors/notFound.error";
 import { UserModel } from "../interfaces/user.interface";
 import User from "../models/User"
@@ -8,7 +9,7 @@ import { logger } from "../utils/logger";
 export class UserRepository {
 
 
-    static async create (user: UserModel) {
+    static async create(user: UserModel) {
         try {
             return await User.create(user)
         } catch (error) {
@@ -17,7 +18,7 @@ export class UserRepository {
         }
     }
 
-     static async findAll() {
+    static async findAll() {
         try {
             return await User.findAll();
         } catch (error) {
@@ -27,7 +28,7 @@ export class UserRepository {
 
     };
 
-     static async findByEmail(email: string){
+    static async findByEmail(email: string) {
         try {
             return await User.findOne({ where: { email: email } })
         } catch (error) {
@@ -37,7 +38,7 @@ export class UserRepository {
         }
     }
 
-     static async findById (id: string){
+    static async findById(id: string) {
         try {
             return await User.findOne({ where: { id: id } })
         } catch (error) {
@@ -47,9 +48,20 @@ export class UserRepository {
         }
     }
 
-     static async findByVerificationCode(verificationCode: string){
+    static async findByVerificationCode(verificationCode: string) {
         try {
-            return await User.findOne({ where: { verificationCode: verificationCode } })
+            return await User.findOne({
+                where: {
+                    [Op.and]: [
+                        { verificationCode: verificationCode },
+                        {
+                            verificationCodeExpiresAt: {
+                                [Op.gt]: new Date()
+                            }
+                        }
+                    ]
+                }
+            });
         } catch (error) {
             logger.error("Erro ao buscar usuário por código de verificação", error);
             throw new Error("Erro ao buscar usuário por código de verificação: " + error.message);
@@ -57,9 +69,20 @@ export class UserRepository {
         }
     }
 
-     static async findByResetPasswordToken(resetPasswordToken: string){
+    static async findByResetPasswordToken(resetPasswordToken: string) {
         try {
-            return await User.findOne({ where: { resetPasswordToken: resetPasswordToken } })
+            return await User.findOne({
+                where: {
+                    [Op.and]: [
+                        { resetPasswordToken: resetPasswordToken },
+                        {
+                            resetPasswordExpiresAt: {
+                                [Op.gt]: new Date()
+                            }
+                        }
+                    ]
+                }
+            });
         } catch (error) {
             logger.error("Erro ao buscar usuário por token de redefinição de senha", error);
             throw new Error("Erro ao buscar usuário por token de redefinição de senha: " + error.message);
@@ -67,7 +90,7 @@ export class UserRepository {
         }
     }
 
-     static async update(id: string, userData: Partial<UserModel>){
+    static async update(id: string, userData: Partial<UserModel>) {
         try {
             const user = await User.findByPk(id);
             if (!user) {
@@ -81,7 +104,7 @@ export class UserRepository {
     };
 
 
-     static async remove(id){
+    static async remove(id) {
         try {
             const user = await User.findByPk(id);
             if (!user) {

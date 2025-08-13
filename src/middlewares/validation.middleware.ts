@@ -10,6 +10,8 @@ export const validateSchema = (schema: ZodSchema, requestSection: RequestSection
             if (!["body", "params", "query"].includes(requestSection)) {
                 throw new Error("Invalid request section");
             }
+            console.log("req[requestSection]", req[requestSection]);
+            
             schema.parse(req[requestSection]);
             next();
     })

@@ -21,6 +21,12 @@ const addPasswordConfirmation = (schema: z.ZodSchema) => {
 
 }
 
+export const baseResetPasswordSchema = z.object({
+    resetPasswordToken: z.string(),
+    password: passwordSchema,
+    confirmPassword: passwordSchema,
+})
+
 export const baseSignUpSchema = z.object({
     name: z.string().min(3, { message: "Name is required" }),
     email: emailSchema,
@@ -28,6 +34,23 @@ export const baseSignUpSchema = z.object({
     confirmPassword: passwordSchema,
 })
 
+export const verifyEmailSchema = z.object({
+    verificationCode: z.string().min(6).max(6),
+})
+
 export const signUpSchema = addPasswordConfirmation(baseSignUpSchema);
+
+export const signInSchema = z.object({
+    email: emailSchema,
+    password: passwordSchema,
+})
+
+export const forgotPasswordSchema = z.object({
+    email: emailSchema,
+})
+
+export const resetPasswordSchema = addPasswordConfirmation(baseResetPasswordSchema);
+
+
 
 

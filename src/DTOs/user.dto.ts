@@ -34,8 +34,8 @@ export class UserDTO {
     return safeData as Omit<
       typeof User,
       | "password"
-      | "verificationToken"
-      | "verificationTokenExpiresAt"
+      | "verificationCode"
+      | "verificationCodeExpiresAt"
       | "resetPasswordToken"
       | "resetPasswordTokenExpiresAt"
     >;

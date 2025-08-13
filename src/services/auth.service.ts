@@ -5,7 +5,8 @@ import { generateVerificationToken } from "../utils/auth.utils"
 import { UserRepository } from "../repositories/user.repository"
 import { BadRequestError } from "../errors/badRequest.error"
 import { NotFoundError } from "../errors/notFound.error"
-import { Request, Response } from "express"
+import bcrypt from "bcryptjs";
+import { randomBytes } from "crypto"
 
 export class AuthService {
     static async register(user: UserModel): Promise<any> {
@@ -22,14 +23,115 @@ export class AuthService {
         return await UserRepository.create(user);
     }
 
-    static async getCurrentUser(req: Request): Promise<any> {
-        const userExists = await UserRepository.findById(req.userId);
-        logger.info("Checking if user exists", { id: req.userId });
+    static async update(id: string, userData: Partial<UserModel>): Promise<any> {
+
+        return await UserRepository.update(id, userData);
+    }
+
+    static async signIn(email: string, password: string): Promise<any> {
+        const user = await UserRepository.findByEmail(email)
+        if (!user) {
+            logger.debug("User not found", { email })
+            throw new BadRequestError("Invalid credentials")
+        }
+
+        const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordMatched) {
+            logger.debug("Invalid credentials", { email })
+            throw new BadRequestError("Invalid credentials")
+        }
+
+        if (!user.isVerified) {
+            logger.debug("User not verified", { email })
+            throw new BadRequestError("User not verified")
+        }
+
+        return await UserRepository.update(user.id, { lastLogin: new Date() });
+    }
+
+    static async getCurrentUser(userId: string): Promise<any> {
+        const userExists = await UserRepository.findById(userId);
+        logger.info("Checking if user exists", { id: userId });
         if (!userExists) {
-            logger.error("User not found", { id: req.userId });
+            logger.error("User not found", { id: userId });
             throw new NotFoundError("User not found");
         }
 
         return userExists;
     }
+
+    static async verifyEmail(verificationCode: string): Promise<any> {
+        const user = await UserRepository.findByVerificationCode(verificationCode);
+        logger.info("Checking if user exists", { verificationCode });
+        if (!user) {
+            logger.debug("Invalid or expired verification token", { verificationCode })
+            throw new NotFoundError("Invalid or expired verification token")
+        }
+
+        const userUpdate = {
+            isVerified: true,
+            verificationCode: undefined,
+            verificationCodeExpiresAt: undefined
+        }
+
+        return await UserRepository.update(user.id, userUpdate);
+    }
+
+    static async resendVerificationEmail(user: UserModel): Promise<any> {
+
+
+        const userUpdate = {
+            verificationCode: generateVerificationToken(),
+        }
+
+        return await UserRepository.update(user.id, userUpdate);
+    }
+
+    static async forgotPassword(email: string): Promise<any> {
+        const user = await UserRepository.findByEmail(email)
+        if (!user) {
+            logger.debug("User not found", { email })
+            throw new BadRequestError("Invalid credentials")
+        }
+
+        if (!user.isVerified) {
+            logger.debug("User not verified", { email })
+            throw new BadRequestError("User not verified")
+        }
+
+
+        const resetToken = randomBytes(16).toString("hex");
+        logger.info("Reset token generated", { resetToken })
+        logger.info("Sending password reset email");
+
+        const userUpdate = {
+            resetPasswordToken: resetToken,
+        }
+
+        return await UserRepository.update(user.id, userUpdate);
+    }
+
+    static async resetPassword(newPassword: string, resetPasswordToken: string): Promise<any> {
+        const user = await UserRepository.findByResetPasswordToken(resetPasswordToken);
+        logger.info("Checking if user exists", { resetPasswordToken });
+        if (!user) {
+            logger.debug("Invalid or expired verification token", { resetPasswordToken })
+            throw new NotFoundError("Invalid or expired verification token")
+        }
+
+        const userUpdate = {
+            password: newPassword,
+            resetPasswordToken: undefined,
+            resetPasswordExpiresAt: undefined
+        }
+
+        return await UserRepository.update(user.id, userUpdate);
+    }
+
+
+
+
+
+
 }

@@ -45,9 +45,9 @@ const replacePlaceholders = (template: string, variables: Record<string, string>
     }, template);
 }
 
-export const sendVerificationEmail = async (email: string, verificationToken: string) => {
+export const sendVerificationEmail = async (email: string, verificationCode: string) => {
     const emailContent = replacePlaceholders(VERIFICATION_EMAIL_TEMPLATE, {
-        verificationCode: verificationToken,
+        verificationCode: verificationCode,
         company: ENV.MAILTRAP_COMPANY_NAME,
     });
 
