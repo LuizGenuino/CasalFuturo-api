@@ -16,14 +16,6 @@ export const generateJWT = (userId: string): string => {
   });
 };
 
-export const setTokenCookie = (res: Response, token: string): void => {
-  res.cookie(ENV.JWT_COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: ENV.NODE_ENV === "production",
-    maxAge: Number(ENV.JWT_COOKIE_MAX_AGE_IN_MS),
-  });
-}
-
 export const generateVerificationToken = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }

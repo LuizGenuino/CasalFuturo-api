@@ -3,14 +3,12 @@ import sequelize from "./config/database"
 import { ENV } from "./utils/env"
 import { errorHandler } from "./utils/errorHandler"
 import router from "./routes"
-import cookieParser from "cookie-parser"
 import helmet from "helmet"
 import { morganMiddleware } from "./middlewares/morgan.middlware"
 
 const app = express()
 
 app.use(express.json())
-app.use(cookieParser())
 app.use(helmet())
 app.use(morganMiddleware)
 

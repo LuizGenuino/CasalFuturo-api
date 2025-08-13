@@ -1,12 +1,12 @@
 import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { logger } from '../utils/logger.ts';
-import { BadRequestError } from '../errors/badRequest.error.ts';
 import { ENV } from '../utils/env.ts';
 import { UnauthorizedError } from '../errors/unauthorized.error.ts';
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
-    const token = req.cookies[ENV.JWT_COOKIE_NAME];
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
 
     if (!token) {
         logger.info('No token provided');

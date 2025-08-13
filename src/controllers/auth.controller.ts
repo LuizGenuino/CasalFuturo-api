@@ -4,7 +4,7 @@ import { AuthService } from "../services/auth.service";
 import { logger } from "../utils/logger";
 import { sendVerificationEmail } from "../providers/email/mailtrap.provider";
 import { UserDTO } from "../DTOs/user.dto";
-import { generateJWT, setTokenCookie } from "../utils/auth.utils";
+import { generateJWT } from "../utils/auth.utils";
 import { NotFoundError } from "../errors/notFound.error";
 
 
@@ -14,9 +14,8 @@ export class AuthController {
         const user = await AuthService.register(data);
         logger.info("User registered successfully", { email: user.email });
 
-        logger.info("Gerenating JWT Token and setting cookie");
+        logger.info("Gerenating JWT Token");
         const token = generateJWT(user.id.toString());
-        setTokenCookie(res, token);
 
         logger.info("Seding verfication code to user", { email: user.email });
         await sendVerificationEmail(user.email, user.verificationCode);
@@ -26,6 +25,7 @@ export class AuthController {
         res.status(201).json({
             message: "User created successfully",
             data: UserDTO.toJson(user),
+            token: token
         });
     });
 
