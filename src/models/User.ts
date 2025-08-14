@@ -30,7 +30,7 @@ const User = sequelize.define<UserInstance>("User", {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            len: [8, 100],
+            len: [6, 100],
         },
     },
     lastLogin: {

@@ -53,7 +53,7 @@ export class AuthController {
 
         if (user.isVerified) {
             logger.debug("User already verified", { userId: user?.id })
-            throw new BadRequestError("User already verified")
+            throw new BadRequestError("Usuário já foi verificado")
         }
 
         const code = { verificationCode: generateVerificationToken() };

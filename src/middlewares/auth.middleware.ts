@@ -10,7 +10,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
     
     if (!token || token === "undefined") {
         logger.info('No token provided');
-        throw new UnauthorizedError('Unauthorized access');
+        throw new UnauthorizedError('Acesso não autorizado');
     }
     
     const decoded = jwt.verify(token, ENV.JWT_SECRET_KEY);
@@ -18,7 +18,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
 
     if (!decoded) {
         logger.info('Invalid token provided');
-        throw new UnauthorizedError('Unauthorized access');
+        throw new UnauthorizedError('Acesso não autorizado');
     }
 
     req.userId = (decoded as jwt.JwtPayload).userId;

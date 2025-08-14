@@ -18,7 +18,7 @@ const envSchema = z.object({
     JWT_SECRET_KEY: z.string(),
     JWT_EXPIRATION_TIME: z.string(),
     BCRYPT_SALT_ROUNDS: z.string().refine((rounds) => parseInt(rounds) > 0 && parseInt(rounds) < 15, "Invalid Bcrypt Salt Rounds"),
-    MIN_PASSWORD_LENGTH: z.string().refine((length) => parseInt(length) >= 8, "Invalid Minimum Password Length"),
+    MIN_PASSWORD_LENGTH: z.string().refine((length) => parseInt(length) >= 6, "Invalid Minimum Password Length"),
     CLIENT_URL: z.string().url(),
 
 })

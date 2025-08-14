@@ -8,7 +8,7 @@ type RequestSection = "body" | "params" | "query";
 export const validateSchema = (schema: ZodSchema, requestSection: RequestSection) =>
     asyncHandler( async (req: Request, res: Response, next: NextFunction) => {
             if (!["body", "params", "query"].includes(requestSection)) {
-                throw new Error("Invalid request section");
+                throw new Error("Seção de solicitação inválida");
             }
             console.log("req[requestSection]", req[requestSection]);
             

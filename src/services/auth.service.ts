@@ -14,7 +14,7 @@ export class AuthService {
         logger.info("Checking if user exists", { email: user.email });
         if (userExists) {
             logger.error("User already exists with this email", { email: user.email });
-            throw new BadRequestError("User already exists with this email");
+            throw new BadRequestError("O usuário com este Email já existe");
         }
 
         user.verificationCode = generateVerificationToken()
@@ -32,19 +32,19 @@ export class AuthService {
         const user = await UserRepository.findByEmail(email)
         if (!user) {
             logger.debug("User not found", { email })
-            throw new BadRequestError("Invalid credentials")
+            throw new BadRequestError("Email ou Senha Invalida")
         }
 
         const isPasswordMatched = await bcrypt.compare(password, user.password);
 
         if (!isPasswordMatched) {
             logger.debug("Invalid credentials", { email })
-            throw new BadRequestError("Invalid credentials")
+            throw new BadRequestError("Email ou Senha Invalida")
         }
 
         if (!user.isVerified) {
             logger.debug("User not verified", { email })
-            throw new BadRequestError("User not verified")
+            throw new BadRequestError("Usuário não verificado")
         }
 
         return await UserRepository.update(user.id, { lastLogin: new Date() });
@@ -55,7 +55,7 @@ export class AuthService {
         logger.info("Checking if user exists", { id: userId });
         if (!userExists) {
             logger.error("User not found", { id: userId });
-            throw new NotFoundError("User not found");
+            throw new NotFoundError("Usuário não encontrado");
         }
 
         return userExists;
@@ -66,7 +66,7 @@ export class AuthService {
         logger.info("Checking if user exists", { verificationCode });
         if (!user) {
             logger.debug("Invalid or expired verification token", { verificationCode })
-            throw new NotFoundError("Invalid or expired verification token")
+            throw new NotFoundError("Código de verificação inválido ou expirado")
         }
 
         const userUpdate = {
@@ -92,12 +92,12 @@ export class AuthService {
         const user = await UserRepository.findByEmail(email)
         if (!user) {
             logger.debug("User not found", { email })
-            throw new BadRequestError("Invalid credentials")
+            throw new BadRequestError("Email ou Senha Invalidos")
         }
 
         if (!user.isVerified) {
             logger.debug("User not verified", { email })
-            throw new BadRequestError("User not verified")
+            throw new BadRequestError("Usuario não Verificado")
         }
 
 
@@ -117,7 +117,7 @@ export class AuthService {
         logger.info("Checking if user exists", { resetPasswordToken });
         if (!user) {
             logger.debug("Invalid or expired verification token", { resetPasswordToken })
-            throw new NotFoundError("Invalid or expired verification token")
+            throw new NotFoundError("Token de verificação inválido ou expirado")
         }
 
         const userUpdate = {
