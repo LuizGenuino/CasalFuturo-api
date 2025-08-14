@@ -5,7 +5,6 @@ import { logger } from "../utils/logger";
 import { sendResetPasswordEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../providers/email/mailtrap.provider";
 import { UserDTO } from "../DTOs/user.dto";
 import { generateJWT, generateVerificationToken } from "../utils/auth.utils";
-import { NotFoundError } from "../errors/notFound.error";
 import { BadRequestError } from "../errors/badRequest.error";
 
 
@@ -24,6 +23,7 @@ export class AuthController {
 
 
         res.status(201).json({
+            success: true,
             message: "User created successfully",
             data: UserDTO.toJson(user),
             token: `Bearer ${token}`

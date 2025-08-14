@@ -23,7 +23,7 @@ sequelize.authenticate()
   .then(() => {
     console.log('Conectado ao banco!');
     // NÃO USAR MAIS sequelize.sync()
-    app.listen(Number(ENV.PORT || "3000"), () => {
+    app.listen(Number(ENV.PORT || "3000"), '0.0.0.0', () => {
       console.log('Servidor rodando em http://localhost:3000');
     });
   })
