@@ -129,9 +129,4 @@ export class AuthService {
         return await UserRepository.update(user.id, userUpdate);
     }
 
-
-
-
-
-
 }

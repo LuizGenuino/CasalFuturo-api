@@ -38,6 +38,16 @@ export class TableRepository {
         }
     }
 
+    static async findByCreatorId(creatorId: string) {
+        try {
+            return await InvestmentTable.findOne({ where: { creatorId: creatorId } })
+        } catch (error) {
+            logger.error("Erro ao buscar tabela de investimento por ID do criador", error);
+            throw new Error("Erro ao buscar tabela de investimento por ID do criador: " + error.message);
+
+        }
+    }
+
     static async update(id: string, tableaData: Partial<InvestmentTableModel>) {
         try {
             const user = await InvestmentTable.findByPk(id);
