@@ -5,9 +5,10 @@ import { errorHandler } from "./utils/errorHandler"
 import router from "./routes"
 import helmet from "helmet"
 import { morganMiddleware } from "./middlewares/morgan.middlware"
+import cors from 'cors';
 
 const app = express()
-
+app.use(cors());
 app.use(express.json())
 app.use(helmet())
 app.use(morganMiddleware)
