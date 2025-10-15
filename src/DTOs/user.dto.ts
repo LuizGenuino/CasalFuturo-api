@@ -1,6 +1,6 @@
 // src/DTOs/user.dto.ts
 
-import User from "../models/User";
+import { User } from "../models/index";
 
 export class UserDTO {
   static toJson(

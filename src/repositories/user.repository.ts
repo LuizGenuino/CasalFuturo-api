@@ -3,7 +3,7 @@
 import { Op } from "sequelize";
 import { NotFoundError } from "../errors/notFound.error";
 import { UserModel } from "../interfaces/user.interface";
-import User from "../models/User"
+import { User } from "../models"
 import { logger } from "../utils/logger";
 
 export class UserRepository {

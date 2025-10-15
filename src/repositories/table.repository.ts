@@ -1,8 +1,9 @@
 //tableRepository.ts
 
+import { Model } from "sequelize";
 import { NotFoundError } from "../errors/notFound.error";
 import { InvestmentTableModel } from "../interfaces/investmentTable.interface";
-import InvestmentTable from "../models/InvestmentTable";
+import { InvestmentTable, UserTable, User } from "../models";
 import { logger } from "../utils/logger";
 
 export class TableRepository {
@@ -10,7 +11,11 @@ export class TableRepository {
 
     static async create(table: InvestmentTableModel) {
         try {
-            return await InvestmentTable.create(table)
+            const tableCreated = await InvestmentTable.create(table)
+
+            await (tableCreated as any).addInvited_user(table.creatorId);
+
+            return tableCreated
         } catch (error) {
             logger.error("Erro ao criar tabela de investimento", error);
             throw new Error("Erro ao criar tabela de investimento: " + error.message);
@@ -34,6 +39,26 @@ export class TableRepository {
         } catch (error) {
             logger.error("Erro ao buscar tabela de investimento por ID", error);
             throw new Error("Erro ao buscar tabela de investimento por ID: " + error.message);
+
+        }
+    }
+
+    static async findByUserId(userId: string) {
+        try {
+            return await await InvestmentTable.findOne({
+                include: [
+                    {
+                        model: User,
+                        as: 'invited_users',
+                        attributes: [],
+                        where: { id: userId },
+                    }
+                ],
+                attributes: { exclude: ['creatorId'] }
+            });
+        } catch (error) {
+            logger.error("Erro ao buscar tabela de investimento por ID do usuario", error);
+            throw new Error("Erro ao buscar tabela de investimento por ID do usuario: " + error.message);
 
         }
     }
