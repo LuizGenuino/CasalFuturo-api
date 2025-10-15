@@ -54,6 +54,12 @@ const User = sequelize.define<UserInstance>("User", {
     verificationCodeExpiresAt: {
         type: DataTypes.DATE,
     },
+    tableInvitationToken: {
+        type: DataTypes.STRING,
+    },
+    tableInvitationExpiresAt: {
+        type: DataTypes.DATE,
+    },
     cor_hex: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -108,6 +114,10 @@ const User = sequelize.define<UserInstance>("User", {
 
             if (user.changed("resetPasswordToken") && user.resetPasswordToken && !user.resetPasswordExpiresAt) {
                 user.resetPasswordExpiresAt = calculateTokenExpiry(1) // 1 hour
+            }
+
+            if (user.changed("tableInvitationToken") && user.tableInvitationToken && !user.tableInvitationExpiresAt) {
+                user.tableInvitationExpiresAt = calculateTokenExpiry(24) // 24 hour
             }
         },
     },

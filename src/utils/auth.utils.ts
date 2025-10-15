@@ -10,8 +10,8 @@ dotenv.config();
 
 const JWT_EXPIRATION_TIME: string = ENV.JWT_EXPIRATION_TIME || "1d"; // Default to 1 hour if not set
 
-export const generateJWT = (userId: string): string => {
-  return jwt.sign({ userId }, ENV.JWT_SECRET_KEY, {
+export const generateJWT = (userId: string, name: string): string => {
+  return jwt.sign({ userId, name }, ENV.JWT_SECRET_KEY, {
     expiresIn: JWT_EXPIRATION_TIME || "1d"
   });
 };

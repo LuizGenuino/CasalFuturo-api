@@ -9,6 +9,8 @@ export interface UserModel {
     resetPasswordExpiresAt?: Date;
     verificationCode?: string;
     verificationCodeExpiresAt?: Date;
+    tableInvitationToken?: string;
+    tableInvitationExpiresAt?: Date;
     cor_hex: string;
     salary?: number; // salário do usuário
     planId?: string; // chave estrangeira para a tabela Planos

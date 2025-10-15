@@ -15,7 +15,7 @@ export class AuthController {
         logger.info("User registered successfully", { email: user.email });
 
         logger.info("Gerenating JWT Token");
-        const token = generateJWT(user.id.toString());
+        const token = generateJWT(user.id.toString(), user.name.toString());
 
         logger.info("Seding verfication code to user", { email: user.email });
         await sendVerificationEmail(user.email, user.verificationCode);
@@ -71,7 +71,7 @@ export class AuthController {
         const user = await AuthService.signIn(email, password)
 
         logger.info("Generating JWT Token");
-        const token = generateJWT(user.id.toString());
+        const token = generateJWT(user.id.toString(), user.name.toString());
 
         res.status(200).json({ success: true, message: "User signed in successfully", data: UserDTO.toJson(user), token: `Bearer ${token}` })
     })

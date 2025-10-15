@@ -86,6 +86,18 @@ export class TableRepository {
         }
     };
 
+    static async acceptInvitation(idTable: string, id: string) {
+        try {
+            const tableCreated = await InvestmentTable.findOne({ where: { id: idTable } })
+
+            await (tableCreated as any).addInvited_user(id);
+
+            return tableCreated
+        } catch (err) {
+            throw new Error("Erro ao aceitar convite para tabela: " + err.message);
+        }
+    };
+
 
     static async remove(id) {
         try {

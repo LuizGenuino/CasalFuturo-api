@@ -90,6 +90,27 @@ export class UserRepository {
         }
     }
 
+    static async findByTableInvitationToken(tableInvitationToken: string) {
+        try {
+            return await User.findOne({
+                where: {
+                    [Op.and]: [
+                        { tableInvitationToken: tableInvitationToken },
+                        {
+                            tableInvitationExpiresAt: {
+                                [Op.gt]: new Date()
+                            }
+                        }
+                    ]
+                }
+            });
+        } catch (error) {
+            logger.error("Erro ao buscar usuário por token de convite para tabela de investimento", error);
+            throw new Error("Erro ao buscar usuário por token de convite para tabela de investimento: " + error.message);
+
+        }
+    }
+
     static async update(id: string, userData: Partial<UserModel>) {
         try {
             const user = await User.findByPk(id);

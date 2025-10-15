@@ -12,6 +12,8 @@ export class UserDTO {
     | "resetPasswordToken"
     | "verificationCodeExpiresAt"
     | "resetPasswordExpiresAt"
+    | "tableInvitationToken"
+    | "tableInvitationExpiresAt"
   > | null {
     if (!user) {
       return null;

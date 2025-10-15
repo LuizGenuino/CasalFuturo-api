@@ -46,3 +46,14 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
 <p>Best regards,<br>{company}</p>
 <p><em>This is an automated message, please do not reply to this email.</em></p>
 `;
+
+export const INVITE_USER_REQUEST_TEMPLATE = `
+<p><strong>Invitation to Investment Table</strong></p>
+<p>Hello,</p>
+<p>You've been invited by {invited_by} to participate in a roundtable discussion on investments. If you don't wish to participate, please ignore this email.</p>
+<p>To accept the invitation, click the link below::</p>
+<p><a href="{resetURL}"><strong>Reset Password</strong></a></p>
+<p>This link will expire in 24 hour for security reasons.</p>
+<p>Best regards,<br>{company}</p>
+<p><em>This is an automated message, please do not reply to this email.</em></p>
+`;

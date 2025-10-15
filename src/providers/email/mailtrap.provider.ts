@@ -3,7 +3,7 @@
 
 import { MailtrapClient } from "mailtrap";
 import { ENV } from "../../utils/env.ts";
-import { PASSWORD_RESET_REQUEST_TEMPLATE, PASSWORD_RESET_SUCCESS_TEMPLATE, VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE } from "./mailtrap.templates.ts";
+import { INVITE_USER_REQUEST_TEMPLATE, PASSWORD_RESET_REQUEST_TEMPLATE, PASSWORD_RESET_SUCCESS_TEMPLATE, VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE } from "./mailtrap.templates.ts";
 import { logger } from "../../utils/logger.ts";
 
 
@@ -80,6 +80,20 @@ export const sendResetPasswordEmail = async (email: string, resetToken: string) 
     await sendEmail({
         subject: "Reset Your Password",
         category: "Password Reset Email",
+        html: emailContent
+    })
+}
+
+export const sendInviteEmail = async (email: string, inviteToken: string, invited_by: string) => {
+    const emailContent = replacePlaceholders(INVITE_USER_REQUEST_TEMPLATE, {
+        resetURL: `${ENV.CLIENT_URL}/accept-invitation/${inviteToken}`,
+        invited_by: invited_by,
+        company: ENV.MAILTRAP_COMPANY_NAME,
+    });
+
+    await sendEmail({
+        subject: "Accept Invitation to Investment Table",
+        category: "Invitation Email",
         html: emailContent
     })
 }

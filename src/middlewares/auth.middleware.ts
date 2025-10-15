@@ -21,6 +21,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
         throw new UnauthorizedError('Acesso não autorizado');
     }
 
+    req.name = (decoded as jwt.JwtPayload).name;
     req.userId = (decoded as jwt.JwtPayload).userId;
 
     next();
